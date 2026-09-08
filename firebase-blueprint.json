@@ -1,0 +1,135 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with contact and authentication details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "whatsapp_number": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "username", "email", "created_at"]
+    },
+    "Listing": {
+      "title": "Listing",
+      "description": "Gaming account listed for sale",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "seller_id": { "type": "string" },
+        "seller_username": { "type": "string" },
+        "seller_whatsapp": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "level": { "type": "number" },
+        "rank": { "type": "string" },
+        "region": { "type": "string" },
+        "login_type": { "type": "string" },
+        "primary_image": { "type": "string" },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "skins": { "type": "string" },
+        "bundles": { "type": "string" },
+        "emotes": { "type": "string" },
+        "characters": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "sold"] },
+        "views": { "type": "number" },
+        "featured": { "type": "boolean" },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["id", "seller_id", "seller_username", "title", "price", "level", "rank", "status", "created_at"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "User saved account listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "listing_id": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "user_id", "listing_id", "created_at"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "User report on a listing",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "listing_id": { "type": "string" },
+        "reporter_id": { "type": "string" },
+        "reason": { "type": "string" },
+        "description": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "listing_id", "reason", "created_at"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "Community review and rating for a seller",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reviewer_user_id": { "type": "string" },
+        "reviewer_username": { "type": "string" },
+        "seller_username": { "type": "string" },
+        "listing_id": { "type": "string" },
+        "rating": { "type": "number" },
+        "title": { "type": "string" },
+        "comment": { "type": "string" },
+        "helpful_count": { "type": "number" },
+        "reported": { "type": "boolean" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "reviewer_user_id", "reviewer_username", "seller_username", "rating", "comment", "created_at"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "entity": "User",
+      "description": "User profiles",
+      "securityRules": {
+        "read": "true",
+        "write": "request.auth != null && (request.auth.uid == resource.data.id || resource == null)"
+      }
+    },
+    "listings": {
+      "entity": "Listing",
+      "description": "Free Fire account listings",
+      "securityRules": {
+        "read": "true",
+        "write": "request.auth != null"
+      }
+    },
+    "favorites": {
+      "entity": "Favorite",
+      "description": "Saved listings per user",
+      "securityRules": {
+        "read": "request.auth != null && request.auth.uid == resource.data.user_id",
+        "write": "request.auth != null"
+      }
+    },
+    "reports": {
+      "entity": "Report",
+      "description": "Account listing reports",
+      "securityRules": {
+        "read": "request.auth != null",
+        "write": "true"
+      }
+    },
+    "reviews": {
+      "entity": "Review",
+      "description": "Community reviews and ratings for sellers",
+      "securityRules": {
+        "read": "true",
+        "write": "request.auth != null"
+      }
+    }
+  }
+}

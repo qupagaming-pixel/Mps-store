@@ -1,0 +1,6 @@
+{
+  "name": "FF ID Seller",
+  "description": "Browse gaming account listings, compare account details and connect directly with independent sellers through WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
